@@ -1,0 +1,214 @@
+#============= Generating Multivariate Normal Samples ===========
+
+
+# Draw a sample of 30 observations from a multivariate normal distribution 𝑁 (𝜇, 𝛴) where 𝜇′ =
+#   (−3, 2, 1) is the mean matrix and 𝛴 = 𝑚𝑎𝑡𝑟𝑖𝑥(𝑐(3, −1,0, −1,3,0,0,0,3), 𝑛𝑟𝑜𝑤 = 3, 𝑛𝑐𝑜𝑙 = 3)
+# is the covariance matrix. Then draw scatter plots and box plots of the variables and discuss the
+# aspects of multivariate data.
+
+install.packages("mvtnorm")
+library(mvtnorm)
+
+#define the mean verctor
+mu<- c(-3,2,1)
+
+#define the covariance matrix Σ
+sigma <- matrix(c(-3,-1,0,-1,3,0,0,0,3), nrow = 3, ncol = 3)
+sigma
+
+
+# Generate a sample of 30 observations from the multivariate normal distribution
+
+
+set.seed(82)
+sample <- rmvnorm(n = 30, mean = mu, sigma = sigma)
+sample
+
+
+# Scatter plots
+pairs(sample, main = "Scatter Plots")
+
+#Boxplot
+boxplot(sample, main = "Box plot")
+
+
+# Draw a sample of 500 observations from a multivariate normal distribution 𝑁 (𝜇, 𝛴) where 𝜇′ =
+#   (5, −6, 0.5) is the mean matrix and 𝛴 =
+# 9 5 2
+# 5 4 1
+# 2 1 1
+# is the covariance matrix. Then draw scatter
+# plots and box plots of the variables and discuss the aspects of multivariate data.
+
+library(mvtnorm)
+
+#define the mean matrix
+u_bar <- c(5, -6, 0.5)
+
+#define variance co-variance matrix
+var_cov <- matrix(c(9,5,2,5,4,1,2,1,1),ncol = 3, byrow = TRUE)
+var_cov
+
+#generate normal distribution
+sample <- rmvnorm(n = 500, mean = u_bar, sigma = var_cov)
+
+pairs(sample,main = "sccater plot")
+boxplot(sample, main = "box plot")
+
+
+
+#======== Test for Multivariate Normality ===================
+
+#problem Statement :---->
+# Construct a Q-Q plot for the “mtcars” data set for the variables “mpg”,“disp”,“hp”,“wt” and
+# carry out a test for normality. What do you conclude?
+
+data("mtcars")
+View(mtcars)
+x <- mtcars[, c("mpg","disp","hp","wt")]
+x
+head(x)
+#number of observaion = number of row
+n <- nrow(x)
+n
+
+#number of parametre (var) = number of col
+p<- ncol(x)
+p
+
+xbar = colMeans(x)
+xbar
+
+v_cov = cov(x)
+v_cov
+D2 = mahalanobis(x, xbar, v_cov)
+D2
+
+plot1 <- qqplot(qchisq(ppoints(n), df= p), D2, main = "Q-Q plot 
+        for assesing multivar nor", ylab = " mahalanobis dis")
+
+abline( a = 0, b = 1)
+
+# mshapiro test 
+install.packages("mvnormtest")
+library(mvnormtest)
+
+mshapiro.test(t(x))
+
+
+# Ho (null): The variables follow a multivariate normal distribution.
+# Ha (alternative): The variables do not follow a multivariate normal distribution.
+# Since p-value=0.000 < 0.01 we may reject null hypothesis at 1% level of significance and may
+# conclude that the variables “mpg”,“disp”,“hp”,“wt” may not follow multivariate normal
+# distribution.
+
+
+
+
+
+
+
+#============Test Vector mean ================
+# Create a matrix X with the variables
+X <- matrix(c(2, 8, 6, 8, 12, 9, 9, 10), ncol = 2)
+
+# Get the number of observations and variables
+n <- nrow(X)
+p <- ncol(X)
+
+# Calculate the degrees of freedom for the test statistic
+df2 <- n - p
+df2
+
+# Calculate the sample means of the variables
+xbar <- colMeans(X)
+xbar
+
+# Calculate the sample covariance matrix
+S <- cov(X)
+S
+
+
+# Specify the hypothesized means
+mu <- c(7, 11)
+mu
+
+
+# Calculate the test statistic T^2
+T2 <- n * t(xbar - mu) %*% solve(S) %*% (xbar - mu)
+T2
+
+
+((n-1)*p)/(n-p)
+ c(df1=p,df2=n-p)
+
+ 
+ #Critical value approach
+ 3*qf(0.05, 2, 2, lower.tail = FALSE)
+
+ #p-value approach
+ pval<-pf((n-p)*T2/((n-1)*p),p,n-p,lower.tail=F)
+ pval
+ 
+ 
+ data(mtcars)
+X <- matrix(c(mtcars$mpg, mtcars$disp, mtcars$hp, mtcars$wt), ncol = 4) 
+X 
+ 
+# Get the number of observations and variables
+n <- nrow(X)
+
+p <- ncol(X)
+# Calculate the degrees of freedom for the test statistic
+df2 <- n - p
+# Calculate the sample means of the variables
+xbar <- colMeans(X)
+ 
+
+# Calculate the sample covariance matrix
+S <- cov(X)
+# Specify the hypothesized means
+mu <- c(20, 200, 150, 3)
+
+T2 <- n * t(xbar - mu) %*% solve(S) %*% (xbar - mu)
+T2 
+ 
+
+library("foreign")
+data("mtcars")
+write.dta(mtcars, "E:/Ecademy/Stat_4th_year/409/mtcars.dta")
+
+write.csv(mtcars , file = "E:/Ecademy/Stat_4th_year/409/mtcar.csv" , row.names = FALSE)
+
+
+library(openxlsx)
+write.xlsx(data, file = "C:/path/to/your/data.xlsx")
+
+
+
+
+
+
+radc<-
+  c(0.15,0.09,0.18,0.1,0.05,0.12,0.08,0.05,0.08,0.1,0.07,0.02,.01,0.1,0.1
+    ,0.1,0.02,0.1,0.01,0.4,0.1,0.05,0.03,0.05,0.15,0.1,0.15,0.09,0.08,0.18,
+    0.1,0.2,0.11,0.3,0.02,0.2,0.2,0.3,0.3,0.4,0.3,0.05)
+rado<-
+  c(0.30,0.09,0.30,0.10,0.10,0.12,0.09,0.10,0.09,0.10,0.07,0.05,0.01,0.45
+    ,0.12,0.2,0.04,0.1,0.01,0.6,0.12,0.1,0.05,0.05,0.15,0.3,0.15,0.09,0.09,
+    0.28,0.1,0.1,0.1,0.3,0.12,0.25,0.2,0.4,0.33,0.32,0.12,0.12)
+x1<-matrix(radc^(1/4))
+x2<-matrix(rado^(1/4))
+x1
+x<-cbind(x1,x2)
+x
+
+
+xbar <-colMeans(x)
+s<-cov(x)
+p <- 2
+n <- 42
+mu<-c(.562,.589)
+T2<-n*t(xbar-mu)%*%solve(s)%*%(xbar-mu)
+T2
+
